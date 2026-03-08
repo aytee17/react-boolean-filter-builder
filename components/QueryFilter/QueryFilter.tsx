@@ -19,12 +19,12 @@ interface IQueryFilterProps {
   isSubQuery?: boolean
   path?: Array<string | number>
   additions: IAddition
-  createAdditionToolKit: (path: string) => IAdditionToolKit
-  createConditionToolKit: (
+  additionToolKitFactory: (path: string) => IAdditionToolKit
+  conditionToolKitFactory: (
     path: string,
     condition: IFilterCl,
   ) => IConditionToolKit
-  createOperatorToolKit: (path: string, operator: string) => IOperatorToolKit
+  operatorToolKitFactory: (path: string, operator: string) => IOperatorToolKit
   parentRemoved?: boolean
 }
 
@@ -36,9 +36,9 @@ const QueryFilter: React.FC<IQueryFilterProps> = ({
   operatorOptions,
   path = [],
   additions,
-  createAdditionToolKit,
-  createConditionToolKit,
-  createOperatorToolKit,
+  additionToolKitFactory,
+  conditionToolKitFactory,
+  operatorToolKitFactory,
   parentRemoved,
 }) => {
   if (filters) {
@@ -46,7 +46,7 @@ const QueryFilter: React.FC<IQueryFilterProps> = ({
     const extendedPath = [...path, "filters", operator]
     const pathKey = pathToKey(extendedPath)
 
-    const { toRemove } = createOperatorToolKit(pathKey, operator)
+    const { toRemove } = operatorToolKitFactory(pathKey, operator)
     const removed = parentRemoved || toRemove
     return (
       <StyledCard disabled={removed}>
@@ -55,7 +55,7 @@ const QueryFilter: React.FC<IQueryFilterProps> = ({
             isSubQuery={isSubQuery}
             operator={operator}
             path={extendedPath}
-            createOperatorToolKit={createOperatorToolKit}
+            operatorToolKitFactory={operatorToolKitFactory}
             parentRemoved={parentRemoved}
           />
           <ConditionList
@@ -66,9 +66,9 @@ const QueryFilter: React.FC<IQueryFilterProps> = ({
             operatorOptions={operatorOptions}
             operator={operator}
             path={extendedPath}
-            createAdditionToolKit={createAdditionToolKit}
-            createConditionToolKit={createConditionToolKit}
-            createOperatorToolKit={createOperatorToolKit}
+            additionToolKitFactory={additionToolKitFactory}
+            conditionToolKitFactory={conditionToolKitFactory}
+            operatorToolKitFactory={operatorToolKitFactory}
             parentRemoved={removed}
           />
         </div>

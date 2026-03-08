@@ -1,7 +1,6 @@
 import React from "react"
 import { Select, Button } from "antd"
 import { MinusOutlined, UndoOutlined } from "@ant-design/icons"
-import { translateOperator } from "./helper"
 import { OperatorContainer, SelectionContainer } from "./style"
 import { pathToKey } from "../../services"
 import { IOperatorToolKit } from "../../hooks/useFilterState"
@@ -12,7 +11,7 @@ interface IHeadingProps {
   isSubQuery?: boolean
   operator: string
   path: Array<string | number>
-  createOperatorToolKit: (path: string, operator: string) => IOperatorToolKit
+  operatorToolKitFactory: (path: string, operator: string) => IOperatorToolKit
   parentRemoved?: boolean
 }
 
@@ -20,7 +19,7 @@ const ExistingOperator: React.FC<IHeadingProps> = ({
   isSubQuery,
   operator,
   path,
-  createOperatorToolKit,
+  operatorToolKitFactory,
   parentRemoved,
 }) => {
   const keyPath = pathToKey(path)
@@ -33,27 +32,21 @@ const ExistingOperator: React.FC<IHeadingProps> = ({
     undoRemove,
     remove,
     undoEdit,
-  } = createOperatorToolKit(keyPath, operator)
+  } = operatorToolKitFactory(keyPath, operator)
 
   const removed = parentRemoved || toRemove
 
   return (
     <OperatorContainer isEdited={isEdited && !parentRemoved}>
       <SelectionContainer removed={removed}>
-        <div style={{ marginRight: "8px" }}>
-          {!isSubQuery ? "Select people that meet " : "Meets"}
-        </div>
-        <span style={{ fontWeight: "bold" }}>
-          <Select
-            value={parentRemoved ? operator : displayOperator}
-            style={{ width: "70px" }}
-            onChange={edit}
-          >
-            <Option value="or">{translateOperator("or")}</Option>
-            <Option value="and">{translateOperator("and")}</Option>
-          </Select>
-        </span>
-        <div style={{ marginLeft: "8px" }}>of the following conditions</div>
+        <Select
+          value={parentRemoved ? operator : displayOperator}
+          style={{ width: "75px" }}
+          onChange={edit}
+        >
+          <Option value="or">OR</Option>
+          <Option value="and">AND</Option>
+        </Select>
       </SelectionContainer>
       {!parentRemoved &&
         (toRemove ? (

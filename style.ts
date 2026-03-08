@@ -7,7 +7,7 @@ const StyledNewQueryFilterContainer = styled.div`
 `
 
 const StyledConditionList = styled.div`
-  margin-left: 32px;
+  margin-left: 8px;
 `
 
 export { StyledNewQueryFilterContainer, StyledConditionList }

@@ -8,7 +8,6 @@ import {
 import { QueryFilter } from "./QueryFilter"
 import { AdditionButtons } from "../AdditionButtons"
 import { NewCondition, ExistingCondition } from "../Condition"
-import { StyledConditionList } from "../../style"
 import { NewQueryFilter } from "./NewQueryFilter"
 import { pathToKey } from "../../services"
 import { OperatorText } from "./style"
@@ -22,12 +21,12 @@ interface IConditionListProps {
   path: Array<string | number>
   operator: string
   additions: IAddition
-  createAdditionToolKit: (path: string) => IAdditionToolKit
-  createConditionToolKit: (
+  additionToolKitFactory: (path: string) => IAdditionToolKit
+  conditionToolKitFactory: (
     path: string,
     condition: IFilterCl,
   ) => IConditionToolKit
-  createOperatorToolKit: (path: string, operator: string) => IOperatorToolKit
+  operatorToolKitFactory: (path: string, operator: string) => IOperatorToolKit
   parentRemoved?: boolean
 }
 
@@ -39,20 +38,23 @@ const ConditionList: React.FC<IConditionListProps> = ({
   path,
   operator,
   additions,
-  createAdditionToolKit,
-  createConditionToolKit,
-  createOperatorToolKit,
+  additionToolKitFactory,
+  conditionToolKitFactory,
+  operatorToolKitFactory,
   parentRemoved,
 }) => {
   const pathKey = pathToKey(path)
   const additionsForCurrentPath = additions[pathKey]
 
-  const additionToolKit = createAdditionToolKit(pathKey)
-  const { displayOperator, toRemove } = createOperatorToolKit(pathKey, operator)
+  const additionToolKit = additionToolKitFactory(pathKey)
+  const { displayOperator, toRemove } = operatorToolKitFactory(
+    pathKey,
+    operator,
+  )
   const removed = parentRemoved || toRemove
 
   return (
-    <StyledConditionList>
+    <>
       {conditions.map((condition, conditionIndex) => {
         const newPath = [...path, conditionIndex]
         return (
@@ -64,7 +66,7 @@ const ConditionList: React.FC<IConditionListProps> = ({
                 entityOptions={entitiyOptions}
                 operatorOptions={operatorOptions}
                 path={newPath}
-                createConditionToolKit={createConditionToolKit}
+                conditionToolKitFactory={conditionToolKitFactory}
                 parentRemoved={removed}
               />
             ) : (
@@ -77,9 +79,9 @@ const ConditionList: React.FC<IConditionListProps> = ({
                 entitiyOptions={entitiyOptions}
                 operatorOptions={operatorOptions}
                 isSubQuery
-                createAdditionToolKit={createAdditionToolKit}
-                createConditionToolKit={createConditionToolKit}
-                createOperatorToolKit={createOperatorToolKit}
+                additionToolKitFactory={additionToolKitFactory}
+                conditionToolKitFactory={conditionToolKitFactory}
+                operatorToolKitFactory={operatorToolKitFactory}
                 parentRemoved={removed}
               />
             )}
@@ -130,7 +132,7 @@ const ConditionList: React.FC<IConditionListProps> = ({
           createFilter={additionToolKit.createFilterAdder([])}
         />
       )}
-    </StyledConditionList>
+    </>
   )
 }
 

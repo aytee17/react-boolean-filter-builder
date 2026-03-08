@@ -10,7 +10,7 @@ import { IConditionToolKit } from "../../hooks/useFilterState"
 
 interface ExistingConditionProps extends ISharedConditionProps {
   path: Array<string | number>
-  createConditionToolKit: (
+  conditionToolKitFactory: (
     path: string,
     condition: IFilterCl,
   ) => IConditionToolKit
@@ -23,7 +23,7 @@ const ExistingCondition: React.FC<ExistingConditionProps> = ({
   entityOptions,
   operatorOptions,
   entities,
-  createConditionToolKit,
+  conditionToolKitFactory,
   parentRemoved,
 }) => {
   const keyPath = pathToKey(path)
@@ -36,7 +36,7 @@ const ExistingCondition: React.FC<ExistingConditionProps> = ({
     isEdited,
     toRemove,
     displayCondition,
-  } = createConditionToolKit(keyPath, condition)
+  } = conditionToolKitFactory(keyPath, condition)
 
   const { entity_type, operator, value } = parentRemoved
     ? condition

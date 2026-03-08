@@ -1,5 +1,11 @@
 import React from "react"
-import { IFilterExpr, IFilterCl, isIFilterCl, IFilter, Entities } from "../../types"
+import {
+  IFilterExpr,
+  IFilterCl,
+  isIFilterCl,
+  IFilter,
+  Entities,
+} from "../../types"
 import { NewOperator } from "../Operator"
 import { NewCondition } from "../Condition"
 import { AdditionButtons } from "../AdditionButtons"
@@ -52,46 +58,44 @@ const NewQueryFilter: React.FC<INewQueryFilterProps> = ({
           keyUpdater={createKeyUpdater([...path, "filters"])}
           onDelete={createDeleter(path)}
         />
-        <StyledConditionList>
-          {conditions.map(
-            (addition: IFilterCl | IFilter, additionIndex: number) => {
-              const newPath = [...extendedPath, additionIndex]
-              return (
-                <React.Fragment key={additionIndex}>
-                  {isIFilterCl(addition) ? (
-                    <NewCondition
-                      condition={addition}
-                      entities={entities}
-                      entityOptions={entitiyOptions}
-                      operatorOptions={operatorOptions}
-                      update={createPropertyUpdater(newPath)}
-                      remove={createDeleter(newPath)}
-                      showDelete={!onlyOne}
-                      isSubCondition
-                    />
-                  ) : (
-                    <NewQueryFilter
-                      path={newPath}
-                      filters={addition.filters}
-                      entities={entities}
-                      entitiyOptions={entitiyOptions}
-                      operatorOptions={operatorOptions}
-                      showDelete={!onlyOne}
-                      additionToolKit={additionToolKit}
-                    />
-                  )}
-                  {additionIndex !== conditions.length - 1 && (
-                    <OperatorText>{operator}</OperatorText>
-                  )}
-                </React.Fragment>
-              )
-            },
-          )}
-          <AdditionButtons
-            createCondition={createConditionAdder(extendedPath)}
-            createFilter={createFilterAdder(extendedPath)}
-          />
-        </StyledConditionList>
+        {conditions.map(
+          (addition: IFilterCl | IFilter, additionIndex: number) => {
+            const newPath = [...extendedPath, additionIndex]
+            return (
+              <React.Fragment key={additionIndex}>
+                {isIFilterCl(addition) ? (
+                  <NewCondition
+                    condition={addition}
+                    entities={entities}
+                    entityOptions={entitiyOptions}
+                    operatorOptions={operatorOptions}
+                    update={createPropertyUpdater(newPath)}
+                    remove={createDeleter(newPath)}
+                    showDelete={!onlyOne}
+                    isSubCondition
+                  />
+                ) : (
+                  <NewQueryFilter
+                    path={newPath}
+                    filters={addition.filters}
+                    entities={entities}
+                    entitiyOptions={entitiyOptions}
+                    operatorOptions={operatorOptions}
+                    showDelete={!onlyOne}
+                    additionToolKit={additionToolKit}
+                  />
+                )}
+                {additionIndex !== conditions.length - 1 && (
+                  <OperatorText>{operator}</OperatorText>
+                )}
+              </React.Fragment>
+            )
+          },
+        )}
+        <AdditionButtons
+          createCondition={createConditionAdder(extendedPath)}
+          createFilter={createFilterAdder(extendedPath)}
+        />
       </StyledNewQueryFilterContainer>
     )
   }

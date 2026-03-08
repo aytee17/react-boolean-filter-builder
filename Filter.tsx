@@ -22,9 +22,9 @@ const Filter: React.FC<IFilterProps> = ({
 }) => {
   const {
     additions,
-    createAdditionToolKit,
-    createOperatorToolKit,
-    createConditionToolKit,
+    additionToolKitFactory,
+    operatorToolKitFactory,
+    conditionToolKitFactory,
   } = filterState
 
   return (
@@ -35,9 +35,9 @@ const Filter: React.FC<IFilterProps> = ({
       entities={entities}
       entitiyOptions={entityOptions}
       operatorOptions={operatorOptions}
-      createConditionToolKit={createConditionToolKit}
-      createAdditionToolKit={createAdditionToolKit}
-      createOperatorToolKit={createOperatorToolKit}
+      conditionToolKitFactory={conditionToolKitFactory}
+      additionToolKitFactory={additionToolKitFactory}
+      operatorToolKitFactory={operatorToolKitFactory}
     />
   )
 }
